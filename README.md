@@ -9,8 +9,8 @@ Este documento detalla los pasos necesarios para clonar y desplegar el proyecto 
 Ejecuta los siguientes comandos para obtener el código fuente:
 
 ```bash
-git clone https://github.com/ivandanielcruzs/tu-repositorio.git
-cd tu-repositorio/backend
+git clone https://github.com/ivandanielcruzs/kitchen_service.git
+cd kitchen_service/backend
 git clone https://github.com/ivandanielcruzs/cocina-service.git
 git clone https://github.com/ivandanielcruzs/almacen-service.git
 ```
