@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  cocina_service:
+    build:
+      context: ./backend/cocina-service
+      dockerfile: Dockerfile
+    container_name: cocina_service
+    restart: always
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      DB_TYPE: ${DB_TYPE}
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      FIRABASE_TYPE: ${FIRABASE_TYPE}
+      FIRABASE_PROJECT_ID: ${FIRABASE_PROJECT_ID}
+      FIRABASE_PRIVATE_KEY_ID: ${FIRABASE_PRIVATE_KEY_ID}
+      FIRABASE_PRIVATE_KEY: ${FIRABASE_PRIVATE_KEY}
+      FIRABASE_CLIENT_EMAIL: ${FIRABASE_CLIENT_EMAIL}
+      FIRABASE_CLIENT_ID: ${FIRABASE_CLIENT_ID}
+      FIRABASE_AUTH_URI: ${FIRABASE_AUTH_URI}
+      FIRABASE_TOKEN_URI: ${FIRABASE_TOKEN_URI}
+      FIRABASE_AUTH_PROVIDER_X509_CERT_URL: ${FIRABASE_AUTH_PROVIDER_X509_CERT_URL}
+      FIRABASE_CLIENT_X509_CERT_URL: ${FIRABASE_CLIENT_X509_CERT_URL}
+      FIRABASE_UNIVERSE_DOMAIN: ${FIRABASE_UNIVERSE_DOMAIN}
+      PORT: ${COCINA_PORT}
+    ports:
+      - "${COCINA_PORT}:${COCINA_PORT}"
+    depends_on:
+      - redis
+
+  almacen_service:
+    build:
+      context: ./backend/almacen-service
+      dockerfile: Dockerfile
+    container_name: almacen_service
+    restart: always
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      DB_TYPE: ${DB_TYPE}
+      JWT_SECRET: ${DB_TYPE}
+      REDIS_HOST: redis
+      PURCHASE_STOCK: ${PURCHASE_STOCK}
+      PORT: ${ALMACEN_PORT}
+    ports:
+      - "${ALMACEN_PORT}:${ALMACEN_PORT}"
+    depends_on:
+      - redis
+      - cocina_service
+
+  frontend:
+    build:
+      context: ./frontend/kitchen-panel
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    env_file: 
+      - .env
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    depends_on:
+      - cocina_service
+      - almacen_service

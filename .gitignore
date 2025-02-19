@@ -1,0 +1,33 @@
+# Ignorar node_modules en cualquier parte del repo
+node_modules/
+
+# Ignorar archivos de entorno, excepto .env-test
+.env
+!.env-test
+
+# Ignorar logs y archivos de caché
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+.idea/
+.vscode/
+dist/
+
+# Ignorar dependencias instaladas por NestJS en cada microservicio
+backend/**/node_modules/
+frontend/**/node_modules/
+
+# Ignorar builds de NestJS (dist)
+backend/**/dist/
+
+# Ignorar builds de React (build)
+frontend/**/build/
+
+# Ignorar Docker y archivos de contenedores
+docker-compose.override.yml
+*.dockerignore
+
+# Ignorar archivos generados por sistemas operativos
+Thumbs.db
